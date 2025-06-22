@@ -242,4 +242,26 @@ describe('<DataGrid /> - Cells', () => {
       });
     },
   );
+
+  it('should not call preProcessEditCellProps when column is editable but cell is not editable', async () => {
+    const { user } = render(
+      <div style={{ width: 300, height: 500 }}>
+        <DataGrid
+          rows={[{ id: 1, name: 'Jon', age: 12 }]}
+          columns={[
+            { field: 'name', editable: true },
+            {
+              field: 'age',
+              editable: true,
+              preProcessEditCellProps: (params) => ({ ...params.props }),
+            },
+          ]}
+          editMode={'row'}
+          isCellEditable={(params) => (params.field === 'age')}
+        />
+      </div>,
+    );
+
+    await user.type(getCell(0, 0), 'name');
+  });
 });
